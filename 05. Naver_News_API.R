@@ -16,23 +16,20 @@ library(RmecabKo)
 
 #뉴스 API 설정(Client_ID와 Client_Secret은 개인별로 추가)
 searchUrl <- "https://openapi.naver.com/v1/search/news.xml"
-Client_ID <- "input your Client_ID"
-Client_Secret <- "input your Client_Secret"
+Client_ID <- "xEGXiMmRfXJbSQeQxDAQ"
+Client_Secret <- "YhcCNT4FWi"
 
 #뉴스 URL 작성(UTF-8로 암호화, API 요청할 URL 정의, 검색결과는 20로 요청)
-query <- URLencode(iconv("경영통계", "euc-kr", "UTF-8"))
+query <- URLencode(iconv("p의거짓", to = "UTF-8"))
 url <- paste(searchUrl, "?query=", query, "&display=20", sep="")
 
 #문서 다운로드_URI 다운로드하기
-doc <- getURL(url, 
-              httpheader = c('Content-Type' = "apllication/xml",
-              'X-Naver-CLient-Id' = Client_ID, 
-              'X-Naver-CLient-Secret' = Client_Secret))
-doc
+doc3 <- getURL(url, httpheader = c('Content-Type' = "apllication/xml", 'X-Naver-CLient-Id' = Client_ID, 'X-Naver-CLient-Secret' = Client_Secret))
+doc3
 
 #뉴스 추출 및 단어 간 빈도 비교
 #XML 문서구조로 변환
-xmlFile <- xmlParse(doc)
+xmlFile <- xmlParse(doc3)
 #뉴스 추출
 df <- xmlToDataFrame(getNodeSet(xmlFile, "//item"))
 #데이터 프레임 구조
@@ -78,7 +75,7 @@ nouns.df.sort
 wordcloud(nouns.df.sort[,1],
                 freq=nouns.df.sort[,2],
                 min.freq=1,
-                scale=c(3,0.7),
+                scale=c(3,1),
                 rot.per=0.25,
                 random.order=F,
                 random.color=T,
