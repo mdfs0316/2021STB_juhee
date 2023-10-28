@@ -15,13 +15,15 @@ install_mecab("C:/Rlibs/mecab")
 library(RmecabKo)
 
 #뉴스 API 설정(Client_ID와 Client_Secret은 개인별로 추가)
+#뉴스 https://openapi.naver.com/v1/search/news.xml
+#블로그 https://openapi.naver.com/v1/search/blog.xml
 searchUrl <- "https://openapi.naver.com/v1/search/news.xml"
 Client_ID <- "xEGXiMmRfXJbSQeQxDAQ"
 Client_Secret <- "YhcCNT4FWi"
 
 #뉴스 URL 작성(UTF-8로 암호화, API 요청할 URL 정의, 검색결과는 20로 요청)
-query <- URLencode(iconv("p의거짓", to = "UTF-8"))
-url <- paste(searchUrl, "?query=", query, "&display=20", sep="")
+query <- URLencode(iconv("네오위즈", to = "UTF-8"))
+url <- paste(searchUrl, "?query=", query, "&display=100", sep="")
 
 #문서 다운로드_URI 다운로드하기
 doc3 <- getURL(url, httpheader = c('Content-Type' = "apllication/xml", 'X-Naver-CLient-Id' = Client_ID, 'X-Naver-CLient-Secret' = Client_Secret))
@@ -35,7 +37,7 @@ df <- xmlToDataFrame(getNodeSet(xmlFile, "//item"))
 #데이터 프레임 구조
 str(df)
 
-#뉴스 내용
+#뉴스 내용(블로그는 3 뉴스는 4)
 description <- df[,4]
 description
 
@@ -72,11 +74,6 @@ nouns.df.sort <- nouns.df[order(-nouns.df$Freq),]
 nouns.df.sort
 
 #단어의 워드 클라우드 작성
-wordcloud(nouns.df.sort[,1],
-                freq=nouns.df.sort[,2],
-                min.freq=1,
-                scale=c(3,1),
-                rot.per=0.25,
-                random.order=F,
-                random.color=T,
-                colors=rainbow(10))
+wordcloud(nouns.df.sort[,1],freq=nouns.df.sort[,2],min.freq=1,scale=c(3,1),rot.per=0.25,random.order=F,random.color=T,colors=rainbow(10))
+
+#뉴스 끝낸 후 블로그 스크립트 재실행해 1회 반복
